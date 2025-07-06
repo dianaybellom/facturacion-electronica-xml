@@ -24,6 +24,31 @@ function actualizarCamposComprador() {
 actualizarCamposComprador();
 tipoFacturaSelect.addEventListener('change', actualizarCamposComprador);
 
+// Acortar descripción de productos en gráfico SVG
+function dividirEnLineas(texto, maxCharPorLinea = 10, maxLineas = 2) {
+    let palabras = texto.split(' ');
+    let lineas = [];
+    let actual = '';
+    for (let palabra of palabras) {
+        if ((actual + ' ' + palabra).trim().length <= maxCharPorLinea) {
+            actual = (actual + ' ' + palabra).trim();
+        } else {
+            lineas.push(actual);
+            actual = palabra;
+            if (lineas.length === maxLineas - 1) break;
+        }
+    }
+    if (lineas.length < maxLineas) {
+        lineas.push(actual);
+    }
+    // Si hay palabras sin incluir, añadir puntos suspensivos
+    if (palabras.join(' ').length > lineas.join('').length) {
+        lineas[lineas.length - 1] = lineas[lineas.length - 1].replace(/\s+$/, '') + '...';
+    }
+    return lineas;
+}
+
+
 // Función para mostrar productos en la lista (oculta la lista)
 function mostrarProductos() {
     listaProductos.innerHTML = '';
@@ -168,7 +193,10 @@ function renderizarSVG() {
         `;
 
         // Etiqueta de producto
-        svgBars += `<text x="${xCantidad + barWidth}" y="${height - margin + 22}" text-anchor="middle" font-size="13" fill="#222">${prod.nombre}</text>`;
+        let lineas = dividirEnLineas(prod.nombre, 10, 2);
+        lineas.forEach((linea, j) => {
+            svgBars += `<text x="${xCantidad + barWidth}" y="${height - margin + 22 + j*15}" text-anchor="middle" font-size="13" fill="#222">${linea}</text>`;
+        });
     });
 
     // Eje Y
