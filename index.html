@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Facturación Electrónica</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div style="display: flex; align-items: center; justify-content: flex-start; gap: 1.2em;">
+            <img src="img/arcadia-logo.png" alt="Logo empresa" style="height: 54px; margin-right: 1.2em;">
+            <span style="font-size: 2.2em; font-weight: bold; color: #fff;">Módulo de Facturación</span>
+        </div>
+    </header>
+
+
+    <main>
+        <!-- Encabezado de la factura -->
+        <section id="encabezado-factura">
+            <h2>Datos del Comprobante</h2>
+            <form id="factura-form">
+                <div>
+                    <label>Tipo de Comprobante</label>
+                        <select id="tipo-factura" required>
+                            <option value="31">Crédito Fiscal (31)</option>
+                            <option value="32" selected>Consumo (32)</option>
+                        </select>
+                </div>
+                <div>
+                    <label>RNC/Cédula del Comprador</label>
+                    <input type="text" id="rnc-comprador" placeholder="RNC/Cédula">
+                </div>
+                <div>
+                    <label>Nombre/Razón Social del Comprador</label>
+                    <input type="text" id="nombre-comprador" placeholder="Nombre o razón social">
+                </div>
+            </form>
+        </section>
+
+        <!-- Registro de productos -->
+        <section id="productos">
+            <h2>Registro de Productos</h2>
+            <form id="producto-form">
+                <input type="text" id="prod-nombre" placeholder="Nombre del producto" required>
+                <input type="number" id="prod-cantidad" placeholder="Cantidad" min="1" required>
+                <input type="number" id="prod-precio" placeholder="Precio Unitario" step="0.01" min="0" required>
+                <button type="submit">Agregar Producto</button>
+            </form>
+            <ul id="lista-productos"></ul>
+        </section>
+
+        <!-- Detalle de la factura -->
+        <section id="factura">
+            <h2>Detalle de la Factura</h2>
+            <div id="factura-detalle"></div>
+            <!-- Gráfico SVG -->
+            <div id="svg-output" style="margin: 2em 0; text-align: center;"></div>
+            <!-- Botones de acción -->
+            <div style="margin-top:1.5em; display: flex; justify-content: flex-end; gap: 1em;">
+                <button id="cancelar-todo"
+                    style="background:#C62828;color:#fff;font-weight:bold;padding:10px 22px;border:none;border-radius:6px;font-size:1.1em;cursor:pointer;">
+                    Cancelar
+                </button>
+                <button id="generar-xml"
+                    style="background:#4BB543;color:#fff;font-weight:bold;padding:10px 22px;border:none;border-radius:6px;font-size:1.1em;cursor:pointer;">
+                    Generar Factura Electrónica (XML)
+                </button>
+            </div>
+        </section>
+
+        <!-- Modal para mostrar el XML generado -->
+        <div id="modal-xml"
+            style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0008;z-index:999;align-items:center;justify-content:center;">
+            <div
+                style="background:#fff;padding:2em 2.5em;border-radius:10px;max-width:650px;width:95vw;max-height:80vh;overflow:auto;box-shadow:0 4px 32px #2224;">
+                <h3>Factura Electrónica (XML)</h3>
+                <pre id="xml-output"
+                    style="background:#f6f6f6;padding:1em;border-radius:6px;overflow:auto;max-width:600px;"></pre>
+                <button onclick="descargarXML()"
+                    style="margin-top:1em;background:#CEDC39;color:#222;border:none;padding:8px 16px;border-radius:6px;font-weight:bold;cursor:pointer;">Descargar
+                    XML</button>
+                <button onclick="cerrarModalXML()"
+                    style="margin-top:1em;margin-left:1em;background:#bbb;color:#222;border:none;padding:8px 16px;border-radius:6px;font-weight:bold;cursor:pointer;">Cerrar</button>
+            </div>
+        </div>
+
+
+        <!-- Bitácora -->
+        <section id="bitacora">
+            <h2>Bitácora de Operaciones</h2>
+            <ul id="log-operaciones"></ul>
+        </section>
+    </main>
+
+
+
+    <footer>
+        <small>CSE652 | By Diana Bello</small>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
